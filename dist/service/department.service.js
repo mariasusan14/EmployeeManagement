@@ -13,19 +13,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const department_entity_1 = __importDefault(require("../entities/department.entity"));
+const logger_service_1 = require("./logger.service");
 class DepartmentService {
     constructor(departmentRepository) {
         this.departmentRepository = departmentRepository;
+        this.logger = logger_service_1.LoggerService.getInstance(DepartmentService.name);
     }
     createDepartment(name) {
         return __awaiter(this, void 0, void 0, function* () {
             const newDepartment = new department_entity_1.default();
             newDepartment.name = name;
+            this.logger.info("Department Created");
             return this.departmentRepository.create(newDepartment);
         });
     }
-    getAllEmployees(id) {
+    getAllEmployeesByDepartmentId(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            this.logger.info("Employees of the Department Returned");
+            return yield this.departmentRepository.findEmployeesByDeptId(id);
+        });
+    }
+    getDepartmentById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.logger.info("Department Returned");
             return yield this.departmentRepository.findById(id);
         });
     }
@@ -35,7 +45,11 @@ class DepartmentService {
             if (existingDept) {
                 const department = new department_entity_1.default();
                 department.name = name;
+                this.logger.info("Department Updated");
                 yield this.departmentRepository.update(id, department);
+            }
+            else {
+                this.logger.error("Department Not Found");
             }
         });
     }
@@ -43,7 +57,11 @@ class DepartmentService {
         return __awaiter(this, void 0, void 0, function* () {
             const existingDept = yield this.departmentRepository.findById(id);
             if (existingDept) {
+                this.logger.info("Department Deleted");
                 yield this.departmentRepository.delete(id);
+            }
+            else {
+                this.logger.error("Department Not Found");
             }
         });
     }

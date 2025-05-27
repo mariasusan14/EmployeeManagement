@@ -12,7 +12,7 @@ class DepartmentRepository{
         return this.repository.find();
     }
 
-   async findById(id:number):Promise<Department>{
+   async findEmployeesByDeptId(id:number):Promise<Department>{
         return this.repository.findOne({
             where:{id},
             relations:{
@@ -21,8 +21,8 @@ class DepartmentRepository{
         });//{id}={id:id}
     }
 
-    async findByName(name:string):Promise<Department>{
-        return this.repository.findOneBy({name})
+    async findById(id:number):Promise<Department>{
+        return this.repository.findOneBy({id})
     }
      
    

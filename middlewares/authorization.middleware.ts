@@ -5,7 +5,6 @@ import httpException from "../exception/httpException";
 
 
 export const checkRole=(authorisedRoles:EmployeeRole[])=>{
-
     return (req:Request,res:Response,next:NextFunction)=>{
     const userRole=req.user?.role
     if(!authorisedRoles.includes(userRole)){
@@ -14,6 +13,5 @@ export const checkRole=(authorisedRoles:EmployeeRole[])=>{
     next();
 }
 }
-
 
 export default checkRole

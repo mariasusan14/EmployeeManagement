@@ -10,5 +10,5 @@ const departmentRouter=express.Router()
 const departmentRepository=new DepartmentRepository(datasource.getRepository(Department))
 const departmentService=new DepartmentService(departmentRepository)
 const departmentController=new DepartmentContoller(departmentService,departmentRouter)
-export{departmentRepository}
+export{departmentService}
 export default departmentRouter

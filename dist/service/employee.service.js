@@ -16,8 +16,8 @@ const address_entity_1 = __importDefault(require("../entities/address.entity"));
 const employee_entity_1 = __importDefault(require("../entities/employee.entity"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const logger_service_1 = require("./logger.service");
-const department_router_1 = require("../routes/department.router");
 const httpException_1 = __importDefault(require("../exception/httpException"));
+const department_router_1 = require("../routes/department.router");
 class EmployeeService {
     constructor(employeeRepository) {
         this.employeeRepository = employeeRepository;
@@ -34,9 +34,9 @@ class EmployeeService {
             newEmployee.experience = experience;
             newEmployee.joiningDate = joiningDate;
             newEmployee.status = status;
-            const dept = yield department_router_1.departmentRepository.findById(department_id);
+            const dept = yield department_router_1.departmentService.getDepartmentById(department_id);
             if (!dept) {
-                throw new httpException_1.default(404, "Department Not Found");
+                this.logger.info("Department Not Found");
             }
             newEmployee.department = dept;
             newEmployee.password = yield bcrypt_1.default.hash(password, 10);
@@ -46,13 +46,20 @@ class EmployeeService {
             newAddr.houseNo = address.houseNo;
             newAddr.pincode = address.pincode;
             newEmployee.address = newAddr;
-            return this.employeeRepository.create(newEmployee);
+            this.logger.info("Employee Created");
+            const employee = yield this.employeeRepository.create(newEmployee);
+            return employee;
         });
     }
     getAllEmployees() {
         return __awaiter(this, void 0, void 0, function* () {
             this.logger.info("employees returned");
-            return this.employeeRepository.findAll();
+            const employees = yield this.employeeRepository.findAll();
+            if (!employees)
+                this.logger.info("No employees found");
+            else
+                this.logger.info("Employees returned");
+            return employees;
         });
     }
     getEmployeeById(id) {
@@ -60,7 +67,9 @@ class EmployeeService {
             let employee = yield this.employeeRepository.findById(id);
             if (!employee) {
                 this.logger.error("employee not found");
-                throw new Error("Employee not found");
+            }
+            else {
+                this.logger.info("employee returned");
             }
             return employee;
         });
@@ -68,16 +77,35 @@ class EmployeeService {
     getEmployeeByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
             this.logger.info("employee returned");
-            return this.employeeRepository.findByEmail(email);
+            const employee = yield this.employeeRepository.findByEmail(email);
+            if (!employee)
+                this.logger.error("Employee Not Found");
+            else {
+                this.logger.info("employee returned");
+            }
+            return employee;
         });
     }
-    updateEmployee(id, email, name) {
+    updateEmployee(id, email, name, emp_id, age, role, experience, joiningDate, status, department_id, address) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingEmp = yield this.employeeRepository.findById(id);
             if (existingEmp) {
                 const employee = new employee_entity_1.default();
                 employee.name = name;
                 employee.email = email;
+                employee.emp_id = emp_id;
+                employee.age = age;
+                employee.role = role;
+                employee.experience = experience;
+                employee.joiningDate = joiningDate;
+                employee.status = status;
+                const dept = yield department_router_1.departmentService.getDepartmentById(department_id);
+                if (!dept) {
+                    throw new httpException_1.default(404, "Department Not Found");
+                }
+                employee.department = dept;
+                const updatedAddress = new address_entity_1.default();
+                employee.address = updatedAddress;
                 this.logger.info("employees updated");
                 yield this.employeeRepository.update(id, employee);
             }

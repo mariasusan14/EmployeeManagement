@@ -23,7 +23,7 @@ class DepartmentRepository {
             return this.repository.find();
         });
     }
-    findById(id) {
+    findEmployeesByDeptId(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.repository.findOne({
                 where: { id },
@@ -33,9 +33,9 @@ class DepartmentRepository {
             }); //{id}={id:id}
         });
     }
-    findByName(name) {
+    findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.repository.findOneBy({ name });
+            return this.repository.findOneBy({ id });
         });
     }
     update(id, department) {
