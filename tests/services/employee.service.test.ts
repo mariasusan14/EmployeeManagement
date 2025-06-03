@@ -5,7 +5,10 @@ import EmployeeService from "../../service/employee.service";
 import Employee from "../../entities/employee.entity";
 import DepartmentService from "../../service/department.service";
 import DepartmentRepository from "../../repositories/department.repository";
-
+import Department from "../../entities/department.entity";
+import { EmployeeRole,EmployeeStatus } from "../../entities/employee.entity";
+import { CreateAddressDto } from "../../dto/create-address.dto";
+import httpException from "../../exception/httpException";
 
 describe("EmployeeService", () => {
   let employeeRepository: MockProxy<EmployeeRepository>;
@@ -19,7 +22,7 @@ describe("EmployeeService", () => {
     departmentService=new DepartmentService(departmentRepository)
   });
 
-  
+
   describe("getEmployeeById", () => {
     it("when employee is found", async () => {
       const mockEmployee = { id: 11, name: "nameee" } as Employee;
@@ -111,5 +114,7 @@ describe("deleteEmployee", () => {
 });
 
 
-  
+
+
+
 });

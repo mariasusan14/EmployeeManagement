@@ -64,6 +64,7 @@ class EmployeeController {
                     console.log(JSON.stringify(errors));
                     throw new httpException_1.default(400, JSON.stringify(errors));
                 }
+                console.log("backend : ", createEmployeeDto);
                 const savedEmployee = yield this.employeeService.createEmployee(createEmployeeDto.email, createEmployeeDto.name, createEmployeeDto.age, createEmployeeDto.address, createEmployeeDto.password, createEmployeeDto.role, createEmployeeDto.department_id, createEmployeeDto.emp_id, createEmployeeDto.experience, createEmployeeDto.joiningDate, createEmployeeDto.status);
                 res.status(201).send(savedEmployee);
             }

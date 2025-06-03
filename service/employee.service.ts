@@ -103,26 +103,33 @@ class EmployeeService {
   ) {
     const existingEmp = await this.employeeRepository.findById(id);
     if (existingEmp) {
-      const employee = new Employee();
-      employee.name = name;
-      employee.email = email;
-      employee.emp_id=emp_id;
-      employee.age=age;
-      employee.role=role;
-      employee.experience=experience;
-      employee.joiningDate=joiningDate;
-      employee.status=status;
+    
+     
+      //const employee = new Employee();
+      existingEmp.name = name;
+      existingEmp.email = email;
+      existingEmp.emp_id=emp_id;
+      existingEmp.age=age;
+      existingEmp.role=role;
+      existingEmp.experience=experience;
+      existingEmp.joiningDate=joiningDate;
+      existingEmp.status=status;
       const dept=await departmentService.getDepartmentById(department_id)
        if (!dept) {
       throw new httpException(404, "Department Not Found");
     }
-    employee.department = dept;
-
+    existingEmp.department = dept;
+     
     const updatedAddress=new Address();
-    employee.address=updatedAddress;
+    existingEmp.address.line1=address.line1
+    existingEmp.address.line2=address.line2
+    existingEmp.address.houseNo=address.houseNo
+    existingEmp.address.pincode=address.pincode
+    
       
       this.logger.info("employees updated");
-      await this.employeeRepository.update(id, employee);
+       
+      await this.employeeRepository.update(id, existingEmp);
     } else {
       this.logger.error("employee not found");
     }

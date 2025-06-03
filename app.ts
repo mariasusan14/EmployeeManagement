@@ -9,7 +9,7 @@ import authRouter from "./routes/auth.routes";
 import authMiddleware from "./middlewares/auth.middleware";
 import { LoggerService } from "./service/logger.service";
 import departmentRouter from "./routes/department.router";
-
+import cors from "cors";
 // const {Client}=require('pg');
 
 const server = express();
@@ -18,7 +18,7 @@ const logger=LoggerService.getInstance('app()')
 server.use(express.json());
 server.use(loggerMiddleware);
 server.use(processTimeMiddleware);
-
+server.use(cors())
 server.use("/employee",authMiddleware, employeeRouter);
 server.use('/auth',authRouter)
 

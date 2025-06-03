@@ -67,6 +67,7 @@ class EmployeeService {
             let employee = yield this.employeeRepository.findById(id);
             if (!employee) {
                 this.logger.error("employee not found");
+                throw new Error("Employee not found");
             }
             else {
                 this.logger.info("employee returned");
@@ -76,10 +77,11 @@ class EmployeeService {
     }
     getEmployeeByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.logger.info("employee returned");
             const employee = yield this.employeeRepository.findByEmail(email);
-            if (!employee)
+            if (!employee) {
                 this.logger.error("Employee Not Found");
+                throw new Error("Employee not found");
+            }
             else {
                 this.logger.info("employee returned");
             }
@@ -90,24 +92,27 @@ class EmployeeService {
         return __awaiter(this, void 0, void 0, function* () {
             const existingEmp = yield this.employeeRepository.findById(id);
             if (existingEmp) {
-                const employee = new employee_entity_1.default();
-                employee.name = name;
-                employee.email = email;
-                employee.emp_id = emp_id;
-                employee.age = age;
-                employee.role = role;
-                employee.experience = experience;
-                employee.joiningDate = joiningDate;
-                employee.status = status;
+                //const employee = new Employee();
+                existingEmp.name = name;
+                existingEmp.email = email;
+                existingEmp.emp_id = emp_id;
+                existingEmp.age = age;
+                existingEmp.role = role;
+                existingEmp.experience = experience;
+                existingEmp.joiningDate = joiningDate;
+                existingEmp.status = status;
                 const dept = yield department_router_1.departmentService.getDepartmentById(department_id);
                 if (!dept) {
                     throw new httpException_1.default(404, "Department Not Found");
                 }
-                employee.department = dept;
+                existingEmp.department = dept;
                 const updatedAddress = new address_entity_1.default();
-                employee.address = updatedAddress;
+                existingEmp.address.line1 = address.line1;
+                existingEmp.address.line2 = address.line2;
+                existingEmp.address.houseNo = address.houseNo;
+                existingEmp.address.pincode = address.pincode;
                 this.logger.info("employees updated");
-                yield this.employeeRepository.update(id, employee);
+                yield this.employeeRepository.update(id, existingEmp);
             }
             else {
                 this.logger.error("employee not found");

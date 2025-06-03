@@ -35,6 +35,7 @@ class EmployeeController {
         console.log(JSON.stringify(errors));
         throw new httpException(400, JSON.stringify(errors));
       }
+      console.log("backend : ",createEmployeeDto)
       const savedEmployee = await this.employeeService.createEmployee(
         createEmployeeDto.email,
         createEmployeeDto.name,
@@ -90,6 +91,7 @@ class EmployeeController {
         throw new httpException(400, JSON.stringify(errors));
       }
       const id = parseInt(req.params.id);
+      
       await this.employeeService.updateEmployee(
         id,
         updatemployeeDto.email,
@@ -103,6 +105,7 @@ class EmployeeController {
         updatemployeeDto.department_id,
         updatemployeeDto.address
       );
+      
       res.status(200).send();
     } catch (err) {
       next(err);

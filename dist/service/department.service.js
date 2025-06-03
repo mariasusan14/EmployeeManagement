@@ -23,20 +23,41 @@ class DepartmentService {
         return __awaiter(this, void 0, void 0, function* () {
             const newDepartment = new department_entity_1.default();
             newDepartment.name = name;
-            this.logger.info("Department Created");
-            return this.departmentRepository.create(newDepartment);
+            const dept = yield this.departmentRepository.create(newDepartment);
+            if (!dept) {
+                this.logger.error("Department Creation Failed");
+                throw new Error("Department creation failed");
+            }
+            else {
+                this.logger.info("Department Created");
+            }
+            return dept;
         });
     }
     getAllEmployeesByDepartmentId(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.logger.info("Employees of the Department Returned");
-            return yield this.departmentRepository.findEmployeesByDeptId(id);
+            const dept = yield this.departmentRepository.findEmployeesByDeptId(id);
+            if (!dept) {
+                this.logger.error("Department Not Found");
+                throw new Error("Department not found");
+            }
+            else {
+                this.logger.info("Employees of the Department Returned");
+            }
+            return dept;
         });
     }
     getDepartmentById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.logger.info("Department Returned");
-            return yield this.departmentRepository.findById(id);
+            const dept = yield this.departmentRepository.findById(id);
+            if (!dept) {
+                this.logger.error("Department Not Found");
+                throw new Error("Department not found");
+            }
+            else {
+                this.logger.info("Department Returned");
+            }
+            return dept;
         });
     }
     updateDepartment(id, name) {
@@ -45,11 +66,12 @@ class DepartmentService {
             if (existingDept) {
                 const department = new department_entity_1.default();
                 department.name = name;
-                this.logger.info("Department Updated");
                 yield this.departmentRepository.update(id, department);
+                this.logger.info("Department Updated");
             }
             else {
                 this.logger.error("Department Not Found");
+                throw new Error("Department not found");
             }
         });
     }
@@ -62,6 +84,7 @@ class DepartmentService {
             }
             else {
                 this.logger.error("Department Not Found");
+                throw new Error("Department not found");
             }
         });
     }

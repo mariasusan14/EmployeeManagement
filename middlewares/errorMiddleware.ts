@@ -11,7 +11,7 @@ let respbody={message:message};
 res.status(status).json(respbody);
     }
     else{
-        console.error(error.stack)
+        //console.error(error.stack)
     res.status(500).send({error:error.message})
     }
 }catch(err){
